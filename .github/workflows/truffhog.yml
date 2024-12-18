@@ -1,0 +1,31 @@
+on:
+  pull_request: {}
+  workflow_dispatch: {}
+  push:
+    branches: ["master", "main", "nfernando"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Secret Scanning
+      uses: trufflesecurity/trufflehog@main
+      with:
+        extra_args: --results=verified,unknown
+      
+# Save SARIF results as an artifact.
+    - name: Save SARIF results as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: truffhog-scan-results
+        path: truffhog-results.sarif
+      # Upload SARIF file to GitHub Security Dashboard for annotation.
+    - name: Upload SARIF result to GitHub Security Dashboard
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: truffhog-results.sarif
+      if: always()
