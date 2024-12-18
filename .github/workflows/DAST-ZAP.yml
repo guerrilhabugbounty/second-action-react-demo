@@ -24,13 +24,9 @@ jobs:
     - name: Start the application
       run: |
         nohup npm start & # Inicia a aplicação em segundo plano
-        sleep 20 # Aguarda a aplicação subir (ajuste conforme necessário)
-
-    - name: Wait for application to be ready
-      run: |
-        for i in {1..10}; do
-          curl -s http://localhost:3000 > /dev/null && break || sleep 5
-        done
+        echo "Esperando a aplicação iniciar..."
+        timeout 60 bash -c -- 'until curl -s http://localhost:3000 > /dev/null; do echo "Aguardando aplicação..."; sleep 5; done'
+      shell: bash
 
     - name: OWASP ZAP Full Scan
       uses: zaproxy/action-full-scan@v0.7.0
