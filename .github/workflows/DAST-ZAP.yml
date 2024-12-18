@@ -1,0 +1,58 @@
+name: OWASP ZAP DAST
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  dast_scan:
+    name: OWASP ZAP DAST Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout do código do repositório
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Configura o Node.js para rodar a aplicação
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Ajuste para a versão necessária do Node.js
+
+      # Instala as dependências do projeto
+      - name: Install dependencies
+        run: npm install
+
+      # Inicia o servidor da aplicação Node.js
+      - name: Start application
+        run: |
+          npm start &
+          echo "Esperando a aplicação subir..."
+          sleep 10
+        env:
+          NODE_ENV: production # Ajuste conforme necessário
+
+      # Baixa e configura o OWASP ZAP
+      - name: Setup OWASP ZAP
+        uses: zaproxy/action-full-scan@v0.7.0
+        with:
+          target: "http://localhost:3000" # Substitua pela URL onde sua aplicação está rodando
+          rules_file_name: false # Desativa a falha no workflow em caso de alertas
+          cmd_options: "-config api.disablekey=true" # Configuração de segurança da API do ZAP
+
+      # Publica os resultados do OWASP ZAP como artefato
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: owasp-zap-report
+          path: report.html
+
+      # Exibe o relatório diretamente nos logs do GitHub Actions
+      - name: Show ZAP report in logs
+        run: cat report.html
