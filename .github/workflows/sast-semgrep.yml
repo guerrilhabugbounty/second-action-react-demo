@@ -26,7 +26,7 @@ jobs:
 
       # Perform Semgrep Analysis on the entire codebase (or specify a directory).
       - name: Perform Semgrep Analysis
-        run: semgrep scan -q --sarif --config auto .
+        run: semgrep scan -q --sarif --config auto . > semgrep-results.sarif
 
       # Save SARIF results as an artifact.
       - name: Save SARIF results as artifact
