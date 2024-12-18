@@ -4,36 +4,30 @@ jobs:
     test:
     runs-on: ubuntu-latest
     steps:
-        - name: Get Code
-        uses: actions/checkout@v4
-
-        - name: Install NodeJS
-        uses: actions/setup-node@v4
-        with:
-            node-version: 18
-
-        - name: Install dependencies
+      - name: Get Code
+      uses: actions/checkout@v4
+      - name: Install NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+      - name: Install dependencies
         run: npm ci
-
-        - name: Run Tests
+      - name: Run Tests
         run: npm test
     deploy:
     runs-on: ubuntu-latest
     steps:
-        - name: Get Code
-        uses: actions/checkout@v4
-
-        - name: Install NodeJS
-        uses: actions/setup-node@v4
+      - name: Get Code
+      uses: actions/checkout@v4
+      - name: Install NodeJS
+      uses: actions/setup-node@v4
         with:
-            node-version: 18
-
-        - name: Install dependencies
-        run: npm ci
-
-        - name: Run Tests
-        run: npm test
-        -name: echo test
-        run: echo "test workflow"
+          node-version: 18
+      - name: Install dependencies
+      run: npm ci
+      - name: Run Tests
+      run: npm test
+      -name: echo test
+      run: echo "test workflow"
 
 
