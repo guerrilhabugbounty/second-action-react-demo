@@ -1,5 +1,7 @@
 name: Test Project
-on: push
+on: 
+  push:
+    branches: ["Main","nfernando"]
 jobs:
     test:
         runs-on: ubuntu-latest
