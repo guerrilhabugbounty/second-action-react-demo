@@ -1,0 +1,43 @@
+name: Semgrep
+
+on:
+  pull_request: {}
+  workflow_dispatch: {}
+  push:
+    branches: ["master", "main", "nfernando"]
+
+jobs:
+  semgrep_scan:
+    name: semgrep/ci
+    runs-on: ubuntu-latest
+    container:
+      image: returntocorp/semgrep  # Docker image with Semgrep preinstalled
+
+    if: (github.actor != 'dependabot[bot]')
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+      # Fetch project source with GitHub Actions Checkout.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Perform Semgrep Analysis on the entire codebase (or specify a directory).
+      - name: Perform Semgrep Analysis
+        run: semgrep scan -q --sarif --config auto .
+
+      # Save SARIF results as an artifact.
+      - name: Save SARIF results as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: semgrep-scan-results
+          path: semgrep-results.sarif
+
+      # Upload SARIF file to GitHub Security Dashboard for annotation.
+      - name: Upload SARIF result to GitHub Security Dashboard
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: semgrep-results.sarif
+        if: always()
