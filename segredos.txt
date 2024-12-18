@@ -1,0 +1,5 @@
+Google Maps API Key: An example is AIzaSyCwEro-wQ6YUNcA1ozA9FQev-DyJp3t2EQ
+OpenWeatherMap API Key: An example is 8dbf5d2a37c4178b4b03e6c49ae3f9e7
+YouTube Data API Key: An example is AIzaSyBhKx_b0yj4erq8sZchmTw8BRXWyivLzW0
+Stripe API Key: An example is sk_test_4eC39HqLyjWDarjtT1zdp7dc
+Twilio API Key and Auth Token: An example Account SID is ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX and an example Auth Token is your_auth_token
